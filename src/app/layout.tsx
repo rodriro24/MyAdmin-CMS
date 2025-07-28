@@ -16,12 +16,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const themeTom = 'dark';
   return (
     <html lang="en">
       <body
         className={`antialiased`}
       >
-        <Theme>
+        <Theme appearance={themeTom}>
           {children}
         </Theme>
       </body>
