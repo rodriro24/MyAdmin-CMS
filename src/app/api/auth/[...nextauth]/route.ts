@@ -1,22 +1,65 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/libs/prisma";
+import bcrypt from "bcrypt";
 
-
+type User = {
+  id: string;
+  email: string;
+  password: string;
+  name: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "user@domain.com" },
-        password: { label: "Password", type: "password", placeholder: "Your password" },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Your password",
+        },
       },
-        async authorize() {
-          return null;
+      async authorize(credentials, req) {
+        const { email, password } = credentials || {};
+
+        if (!email || !password) {
+          throw new Error("Missing email or password");
         }
-      })
-  ], pages: {
+
+        const userFound = await prisma.user.findUnique({
+          where: { email },
+        });
+
+        if (!userFound) {
+          throw new Error("User not found");
+        }
+
+        const isPasswordValid = await bcrypt.compare(
+          password,
+          userFound.password
+        );
+
+        if (!isPasswordValid) {
+          throw new Error("Invalid credentials");
+        }
+
+        // Convert id to string to match User type
+        console.log("User authenticated:", userFound);
+        return {
+          email: userFound.email,
+          name: userFound.name,
+          id: userFound.id.toString(),
+        };
+      },
+    }),
+  ],
+  pages: {
     signIn: "/auth/login",
   },
-})
+});
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

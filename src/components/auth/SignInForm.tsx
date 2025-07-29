@@ -3,17 +3,34 @@ import "@radix-ui/themes/styles.css";
 import { EnvelopeClosedIcon, LockClosedIcon } from "@radix-ui/react-icons";
 import { Flex, TextField, Button } from "@radix-ui/themes";
 import React, { useState } from "react";
+import {signIn} from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { set } from "react-hook-form";
 
 const SignInForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const router = useRouter();
+  const [requested, setRequested] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    setRequested(true);
     e.preventDefault();
-    console.log(form); // acá iría tu lógica de auth
+    // console.log(form); // acá iría tu lógica de auth
+    // alert(`user ${ form.email} is trying to signin`)
+    const res = await signIn('credentials', {
+      redirect: false,
+      email: form.email,
+      password: form.password,
+    })
+    if (!res?.ok) {
+      setRequested(false);
+      return console.log(res)
+    }
+    router.push('/dashboard')
   };
 
   return (
@@ -44,7 +61,7 @@ const SignInForm = () => {
           </TextField.Slot>
         </TextField.Root>
 
-        <Button color="blue" type="submit">
+        <Button color="blue" type="submit" loading={requested}>
           Sign In
         </Button>
       </Flex>
