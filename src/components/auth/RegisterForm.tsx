@@ -8,7 +8,8 @@ import {
 import { Flex, TextField, Button } from "@radix-ui/themes";
 import React, { useState } from "react";
 import axios from "axios";
-
+import {signIn} from 'next-auth/react'
+import {useRouter} from 'next/navigation'
 const RegisterForm = () => {
   const [form, setForm] = useState({
     name: "",
@@ -18,21 +19,38 @@ const RegisterForm = () => {
     password: "",
     confirmPassword: "",
   });
-
+  const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  const [requested, setRequested] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setRequested(true);
     console.log(form); // lógica para registrar
     const res = await axios.post("/api/auth/register", form);
-    console.log(res);
+    // console.log(res);
+    
+    if (res.status === 201) {
+      const { email, password } = form;
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      })
+      if (!result?.ok) {
+        console.log(result?.error)
+        setRequested(false);
+        return;
+      }
+      router.push('/dashboard')
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Flex direction="column" gap="3" className="my-4 mx-auto" width="300px">
+      <Flex direction="column" gap="3" className="mx-auto" width="300px">
         <label htmlFor="name">Name</label>
         <TextField.Root
           id="name"
@@ -104,21 +122,9 @@ const RegisterForm = () => {
           </TextField.Slot>
         </TextField.Root>
 
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <TextField.Root
-          id="confirmPassword"
-          name="confirmPassword"
-          placeholder="Retype your password"
-          type="password"
-          value={form.confirmPassword}
-          onChange={handleChange}
-        >
-          <TextField.Slot>
-            <LockClosedIcon height="16" width="16" />
-          </TextField.Slot>
-        </TextField.Root>
+        
 
-        <Button color="blue" type="submit">
+        <Button color="blue" type="submit" loading={requested}>
           Sign Up
         </Button>
       </Flex>

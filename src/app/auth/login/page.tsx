@@ -7,8 +7,8 @@ import NavLink from 'next/link';
 const page = () => {
   return (
     <>
-      <Container size="1" height="100%">
-        <Flex className="h-screen w-full items-center">
+      <Container size="1" align={'center'} className='h-[calc(100vh-4rem)] flex items-center justify-center'>
+        <Flex className="w-full items-center mt-auto mb-auto my-auto">
           <Card className='w-full'>
             <Heading className='text-center'>
               Log In

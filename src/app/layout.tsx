@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
-
-
+import NavBar from "@/components/NavBar";
+import ContextProvider from "@/context/GlobalContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,14 +16,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const themeTom = 'dark';
+  const themeTom = "dark";
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        <Theme appearance={themeTom}>
-          {children}
+      <body>
+        <Theme appearance="dark">
+          <ContextProvider>
+            <NavBar />
+            {children}
+          </ContextProvider>
         </Theme>
       </body>
     </html>

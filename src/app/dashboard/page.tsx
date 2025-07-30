@@ -1,7 +1,9 @@
 
 const DashboardPage = () => {
   return (
-    <div>Pagina protegida</div>
+    <div className="flex justify-center items-center  h-[calc(100vh-4.1rem)]">
+      Pagina protegida
+    </div>
   )
 }
 

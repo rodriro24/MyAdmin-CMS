@@ -8,14 +8,14 @@ import NavLink from 'next/link';
 const page = () => {
   return (
     <>
-      <Container size="1" height="100%">
-        <Flex className="h-screen w-full items-center">
+    <Container size="1" align={'center'} className='h-[calc(100vh-4rem)] flex items-center justify-center'>
+      <Flex className="w-full items-center">
           <Card className='w-full'>
             <Heading className='text-center'>
               Register
             </Heading>
             <RegisterForm />
-            <Flex className='text-sm' justify={'center'} align={'center'} gap={'1'}>
+            <Flex className='text-sm' justify={'center'} align={'center'} gap={'1'} mt={'5'}>
               <Text className='cursor-pointer'> Already have an Account?</Text>
               <Link  asChild>
                 <NavLink href={'/auth/login'}>
