@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   const themeTom = "dark";
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
         <Theme appearance="dark">
           <ContextProvider>
