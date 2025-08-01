@@ -1,41 +1,43 @@
-import { prisma } from '@/libs/prisma';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/libs/prisma";
 
-export async function GET(request: Request, context: { params: { id: string } }) {
-  const id = Number(context.params.id); // ✅ sin await
+export async function GET(request: Request, { params }: { params: any }) {
+  const id = Number(params.id);
+
   try {
-    const res = await prisma.project.findUnique({
-      where: { id }
-    });
+    const res = await prisma.project.findUnique({ where: { id } });
+    if (!res) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
     return NextResponse.json(res);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.error();
   }
 }
 
-export async function DELETE(request: Request, context: { params: { id: string } }) {
-  const id = Number(context.params.id);
+export async function DELETE(request: Request, { params }: { params: any }) {
+  const id = Number(params.id);
+
   try {
-    const res = await prisma.project.delete({
-      where: { id }
-    });
-    return NextResponse.json('Project successfully deleted from database');
+    await prisma.project.delete({ where: { id } });
+    return NextResponse.json({ message: "Project successfully deleted" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.error();
   }
 }
 
-export async function PUT(request: Request, context: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: any }) {
+  const id = Number(params.id);
   const data = await request.json();
-  const id = Number(context.params.id);
+
   try {
-    const changes = await prisma.project.update({
+    const updatedProject = await prisma.project.update({
       where: { id },
-      data
+      data,
     });
-    return NextResponse.json(changes, { status: 200 });
+    return NextResponse.json(updatedProject);
   } catch (error) {
     console.error(error);
     return NextResponse.error();

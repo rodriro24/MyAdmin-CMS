@@ -1,14 +1,14 @@
 import { prisma } from "@/libs/prisma";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/libs/authOptions";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
   try {
     const res = await prisma.project.findMany({
       where: {
-        userId: Number(session?.id),
+        userId: Number(session?.user?.id),
       },
     });
     return NextResponse.json(res);
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
         content: data.content,
         user: {
           connect: {
-            id: Number(session?.id),
+            id: Number(session?.user?.id),
           },
         },
       },
