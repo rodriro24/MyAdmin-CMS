@@ -17,10 +17,12 @@ import {
   LayoutDashboard,
   LogOut
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 
 const NavBar = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   return (
     <nav className="bg-zinc-950">
       <Container>
@@ -31,7 +33,7 @@ const NavBar = () => {
         >
           <NavLink href={"/"}>
             {/* <Text className="text-xl font-extrabold ">RadixNext</Text> */}
-            <Heading>RadixNext</Heading>
+            <Heading>MyAdmin</Heading>
           </NavLink>
 
           <ul className="flex flex-row gap-x-4 text-cyan-700 items-center">
@@ -76,12 +78,12 @@ const NavBar = () => {
 
                 <DropdownMenu.Content>
                   <DropdownMenu.Item><User className="w-4 h-4 mr-2" />Profile</DropdownMenu.Item>
-                  <DropdownMenu.Item><Settings className="w-4 h-4 mr-2" />Settings</DropdownMenu.Item>
+                  <DropdownMenu.Item onClick={() => router.push('/settings')}><Settings className="w-4 h-4 mr-2" />Settings</DropdownMenu.Item>
 
                   <DropdownMenu.Separator />
 
-                  <DropdownMenu.Item><LayoutDashboard className="w-4 h-4 mr-2" />Manage Account</DropdownMenu.Item>
-                  <DropdownMenu.Separator />
+                  {/* <DropdownMenu.Item><LayoutDashboard className="w-4 h-4 mr-2" />Manage Account</DropdownMenu.Item>
+                  <DropdownMenu.Separator /> */}
                   <DropdownMenu.Item color="red" onClick={() => signOut()}>
                     <LogOut className="w-4 h-4 mr-2" />Logout
                   </DropdownMenu.Item>

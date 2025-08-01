@@ -1,40 +1,49 @@
 "use client";
 
+import StatusCard from "@/components/dashboard/StatusCard";
 import {
+  Badge,
   Button,
   Card,
+  Checkbox,
   Container,
   Flex,
   Heading,
   Separator,
   Skeleton,
+  Switch,
   Text,
 } from "@radix-ui/themes";
+import { Header } from "@radix-ui/themes/components/table";
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
+import { ArrowLeft, BookmarkIcon } from "lucide-react";
+import { redirect, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function ProjectPage() {
-  const router = useRouter();
   const { id } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [showable, setShowable] = useState(false);
   const [isSaving, setIsSaving] = useState(false); // solo para el botón
   const [defaultData, setDefaultData] = useState<{
     title: string;
     content: string;
-  }>({ title: "", content: "" });
+    showable: boolean;
+  }>({ title: "", content: "", showable: false });
 
   useEffect(() => {
     const getProject = async () => {
       try {
         const res = await axios.get(`/api/projects/${id}`);
-        const { title, content } = res.data;
+        const { title, content, showable } = res.data;
+        console.log(res.data);
 
         setTitle(title);
         setContent(content);
-        setDefaultData({ title, content }); // ahora sí, bien
+        setShowable(showable);
+        setDefaultData({ title, content, showable }); // ahora sí, bien
       } catch (error) {
         console.error("Error fetching project:", error);
       }
@@ -49,18 +58,20 @@ export default function ProjectPage() {
       const res = await axios.put(`/api/projects/${id}`, {
         title,
         content,
+        showable
       });
       if (res.status === 200) {
         setDefaultData({
           title,
           content,
+          showable,
         });
         toast.success("Changes saved!", {
           style: {
             border: "1px solid #2596be",
             padding: "10px",
             color: "#fff",
-            background: '#555',
+            background: "#555",
           },
           iconTheme: {
             primary: "#2596be",
@@ -77,10 +88,33 @@ export default function ProjectPage() {
   };
 
   return (
-    <Container className="h-[calc(100vh-4rem)] pt-16 px-4">
+    <Container className="h-[calc(100vh-4rem)] pt-10 px-4">
       <Toaster />
-      <form onSubmit={handleSave} className="">
-        <Card className="max-w-3xl w-full mx-auto p-6 shadow-md rounded-2xl min-h-[500px]">
+      <form onSubmit={handleSave}>
+        <div className="mx-auto max-w-3xl py-1 flex items-center justify-between">
+          <div className="flex items-center gap-x-2">
+            <ArrowLeft color="lightblue" onClick={() => redirect('/dashboard')}/>
+            <Heading>Edit Project</Heading>
+          {(title && content) && (
+            <Badge
+              color={defaultData.showable ? "green" : "red"}
+              size={"1"}
+              className="rounded-2xl"
+            >
+              {defaultData.showable ? "Active" : "Inactive"}
+            </Badge>
+          )}
+          </div>
+          <Text as="label" size="2" className="justify-self-end">
+            <Flex gap="2">
+              Display into porftolio
+              <Checkbox checked={ showable } onClick={() => setShowable(prev => !prev)}/>
+
+            </Flex>
+          </Text>
+        </div>
+
+        <Card className="max-w-3xl w-full mx-auto p-6 shadow-md rounded-2xl min-h-[500px] mt-2">
           <Flex direction="column" gap="5" align="center">
             <Heading size="5" className="w-full text-center pt-2">
               {!title ? (
@@ -137,7 +171,8 @@ export default function ProjectPage() {
                   }}
                   disabled={
                     defaultData.title === title &&
-                    defaultData.content === content
+                    defaultData.content === content &&
+                    defaultData.showable === showable
                   }
                 >
                   Cancel
@@ -148,10 +183,11 @@ export default function ProjectPage() {
                   type="submit"
                   disabled={
                     defaultData.title === title &&
-                    defaultData.content === content
+                    defaultData.content === content &&
+                    defaultData.showable === showable
                   }
                 >
-                  Save Changes
+                  <BookmarkIcon size={"20"} /> Save Changes
                 </Button>
               </Flex>
             )}

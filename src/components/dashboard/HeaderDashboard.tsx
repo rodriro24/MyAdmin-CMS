@@ -9,12 +9,12 @@ const HeaderDashboard = () => {
   
   return (
     <Flex justify={"between"}>
-        <Heading ml={"8rem"}>Tasks</Heading>
+        <Heading ml={"8rem"}>Projects</Heading>
         <Button
           mr={"8rem"}
           onClick={() => router.push("/dashboard/task/create")}
         >
-          Add task
+          Add project
         </Button>
       </Flex>
   )

@@ -9,7 +9,8 @@ import {
   Card,
 } from "@radix-ui/themes";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
@@ -52,6 +53,7 @@ const Page = () => {
       <form className="space-y-6 max-w-xl mx-auto" onSubmit={onSubmit}>
         <Card size={"3"} >
           <Flex direction="column" gap="5">
+            <ArrowLeft color="lightblue" onClick={() => redirect('/dashboard')} />
             <Heading>
               New Project
             </Heading>

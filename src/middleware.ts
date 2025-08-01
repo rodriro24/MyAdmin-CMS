@@ -1,3 +1,3 @@
 export { default } from "next-auth/middleware"
 
-export const config = { matcher: ["/dashboard/:path*"] } // protege /dashboard y todas sus subrutas
+export const config = { matcher: ["/dashboard/:path*", "/settings"] } // protege /dashboard y todas sus subrutas
