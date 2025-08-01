@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/libs/prisma";
 
-export async function GET(request: Request, { params }: { params: any }) {
+interface Params {
+  id: string;
+}
+
+export async function GET(request: Request, { params }: { params: Params }) {
   const id = Number(params.id);
 
   try {
@@ -16,7 +20,7 @@ export async function GET(request: Request, { params }: { params: any }) {
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: any }) {
+export async function DELETE(request: Request, { params }: { params: Params }) {
   const id = Number(params.id);
 
   try {
@@ -28,7 +32,7 @@ export async function DELETE(request: Request, { params }: { params: any }) {
   }
 }
 
-export async function PUT(request: Request, { params }: { params: any }) {
+export async function PUT(request: Request, { params }: { params: Params }) {
   const id = Number(params.id);
   const data = await request.json();
 
