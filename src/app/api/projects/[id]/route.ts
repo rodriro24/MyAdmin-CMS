@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/libs/prisma";
 
-type Context = {
-  params: {
-    id: string;
-  };
-};
-
-export async function GET(_req: NextRequest, { params }: Context) {
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const id = Number(params.id);
+  if (isNaN(id)) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
 
   try {
     const project = await prisma.project.findUnique({ where: { id } });
@@ -22,8 +22,14 @@ export async function GET(_req: NextRequest, { params }: Context) {
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: Context) {
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const id = Number(params.id);
+  if (isNaN(id)) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
 
   try {
     await prisma.project.delete({ where: { id } });
@@ -34,12 +40,22 @@ export async function DELETE(_req: NextRequest, { params }: Context) {
   }
 }
 
-export async function PUT(req: NextRequest, { params }: Context) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const id = Number(params.id);
+  if (isNaN(id)) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
+
   const data = await req.json();
 
   try {
-    const updated = await prisma.project.update({ where: { id }, data });
+    const updated = await prisma.project.update({
+      where: { id },
+      data,
+    });
     return NextResponse.json(updated);
   } catch (error) {
     console.error(error);
