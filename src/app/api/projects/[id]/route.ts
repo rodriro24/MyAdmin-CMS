@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/libs/prisma";
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   const id = Number(params.id);
   if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
@@ -22,10 +19,7 @@ export async function GET(
   }
 }
 
-export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
   const id = Number(params.id);
   if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
@@ -40,10 +34,7 @@ export async function DELETE(
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest,{ params }: { params: { id: string } }) {
   const id = Number(params.id);
   if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
