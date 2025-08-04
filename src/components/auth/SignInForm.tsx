@@ -26,6 +26,7 @@ const SignInForm = () => {
       email: form.email,
       password: form.password,
     })
+    console.log(res)
     if (!res?.ok) {
       setRequested(false);
       if ((res?.error?.toLocaleLowerCase()) === 'invalid credentials') setUnauthorized(true);
