@@ -19,20 +19,28 @@ const SignInForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+
     setRequested(true);
+
     e.preventDefault();
+
     const res = await signIn('credentials', {
       redirect: false,
       email: form.email,
       password: form.password,
     })
     console.log(res)
+
     if (!res?.ok) {
       setRequested(false);
       if ((res?.error?.toLocaleLowerCase()) === 'invalid credentials') setUnauthorized(true);
       if((res?.error?.toLocaleLowerCase()) === 'user not found') setNotFound(true);
+    } else {
+      setRequested(false);
+      router.push('/dashboard')
     }
-    router.push('/dashboard')
+
+    
   };
 
   return (
