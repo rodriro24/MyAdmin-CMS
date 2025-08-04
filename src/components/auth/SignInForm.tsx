@@ -4,7 +4,7 @@ import { EnvelopeClosedIcon, LockClosedIcon } from "@radix-ui/react-icons";
 import { Flex, TextField, Button } from "@radix-ui/themes";
 import React, { useState } from "react";
 import {signIn} from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 
 const SignInForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -35,11 +35,8 @@ const SignInForm = () => {
       if ((res?.error?.toLocaleLowerCase()) === 'invalid credentials') setUnauthorized(true);
       if((res?.error?.toLocaleLowerCase()) === 'user not found') setNotFound(true);
     } else {
-      // setRequested(false); 
-      router.push('/dashboard')
-      router.refresh();
+      redirect('/dashboard')
     }
-
     
   };
 

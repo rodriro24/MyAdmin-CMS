@@ -30,12 +30,9 @@ const Page = () => {
       title,
       content
     }
-    // console.log(task)
     try {
       const res = await axios.post('/api/projects', task)
-      // console.log(res)
       if (res.status === 201) {
-        // alert('Task saved')
         setTitle('');
         setContent('');
         router.push('/dashboard') //opcional, redirecciona al panel
