@@ -1,4 +1,4 @@
-import { Box, Flex, HoverCard, Text } from "@radix-ui/themes";
+import { HoverCard, Text } from "@radix-ui/themes";
 import { MonitorCheck, MonitorX } from "lucide-react";
 import React from "react";
 

@@ -1,6 +1,5 @@
 "use client";
 
-import StatusCard from "@/components/dashboard/StatusCard";
 import {
   Badge,
   Button,
@@ -11,13 +10,11 @@ import {
   Heading,
   Separator,
   Skeleton,
-  Switch,
   Text,
 } from "@radix-ui/themes";
-import { Header } from "@radix-ui/themes/components/table";
 import axios from "axios";
 import { ArrowLeft, BookmarkIcon } from "lucide-react";
-import { redirect, useParams, useRouter } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -134,22 +131,16 @@ export default function ProjectPage() {
             {!content ? (
               <Text>
                 <Skeleton>
-                  consectetur adipisicing elit Lorem ipsum dolor sit amet Lorem
-                  ipsum, dolor sit amet consectetur adipisicing elit Lorem ipsum
-                  dolor sit amet Lorem ipsum, dolor sit amet consectetur
-                  adipisicing elit Lorem ipsum dolor sit amet Lorem ipsum, dolor
-                  sit amet consectetur adipisicing elit Lorem ipsum dolor sit
-                  amet Lorem ipsum, dolor sit amet consectetur adipisicing elit
-                  Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
-                  consectetur adipisicing elit Lorem ipsum dolor sit amet Lorem
-                  ipsum, dolor sit amet consectetur adipisicing elit Lorem ipsum
-                  dolor sit amet Lorem ipsum, dolor sit amet consectetur
-                  adipisicing elit Lorem ipsum dolor sit amet Lorem ipsum, dolor
-                  sit amet consectetur adipisicing elit Lorem ipsum dolor sit
-                  amet Lorem ipsum, dolor sit amet consectetur adipisicing elit
-                  Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
-                  consectetur adipisicing elit Lorem ipsum dolor sit amet Lorem
-                  ipsum, dolor sit amet
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                 </Skeleton>
               </Text>
             ) : (

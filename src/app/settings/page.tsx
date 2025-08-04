@@ -17,13 +17,11 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { ArrowUpIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 const Settings = () => {
   const { data: session } = useSession();
   const [apiKey, setApiKey] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   //esto verifica cada vez que entra si tiene ya una apikey
   useEffect(() => {
@@ -31,8 +29,8 @@ const Settings = () => {
       try {
         const res = await axios.get("/api/auth/user");
         setApiKey(res.data.apiKey);
-      } catch (error) {
-        console.error("Something went wrong getting the apikey");
+      } catch (e) {
+        console.error("Something went wrong getting the apikey", e);
       }
     };
     getApiKey();

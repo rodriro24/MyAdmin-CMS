@@ -10,10 +10,6 @@ import {
 } from "@radix-ui/themes";
 import axios from "axios";
 import {
-  Circle,
-  Edit,
-  MonitorCheck,
-  MonitorX,
   Pencil,
   Trash2,
 } from "lucide-react";

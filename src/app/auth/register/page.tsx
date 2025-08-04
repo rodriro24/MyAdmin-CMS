@@ -1,6 +1,5 @@
 import RegisterForm from '@/components/auth/RegisterForm';
 import { Card, Container, Heading, Flex, Text, Link } from '@radix-ui/themes'
-import { constants } from 'buffer';
 import NavLink from 'next/link';
 
 

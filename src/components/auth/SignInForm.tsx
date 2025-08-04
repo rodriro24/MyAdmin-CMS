@@ -5,7 +5,6 @@ import { Flex, TextField, Button } from "@radix-ui/themes";
 import React, { useState } from "react";
 import {signIn} from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { set } from "react-hook-form";
 
 const SignInForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });

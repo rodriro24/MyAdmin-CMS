@@ -14,7 +14,6 @@ import { useSession, signOut } from "next-auth/react";
 import {
   User,
   Settings,
-  LayoutDashboard,
   LogOut
 } from "lucide-react";
 import { useRouter } from "next/navigation";

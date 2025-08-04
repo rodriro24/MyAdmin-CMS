@@ -7,7 +7,6 @@ import {
   Text,
   Card,
   Grid,
-  Inset,
 } from "@radix-ui/themes";
 import {
   SiNextdotjs,

@@ -58,7 +58,7 @@ const Page = () => {
               New Project
             </Heading>
             <div className="relative mb-2">
-              <Controller control={ control } name='title' render={({field}) => {
+              <Controller control={ control } name='title' render={() => {
                 return (
                   <TextField.Root
                     id="title"
@@ -83,7 +83,7 @@ const Page = () => {
             </div>
 
             <div className="relative">
-              <Controller control={ control } name="content" render={({field}) => {
+              <Controller control={ control } name="content" render={() => {
                 return (
                   <TextArea
                     id="content"

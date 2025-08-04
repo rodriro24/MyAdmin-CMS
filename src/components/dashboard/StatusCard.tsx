@@ -1,5 +1,4 @@
-import { Badge, DataList, Flex, IconButton, Link, Code } from '@radix-ui/themes'
-import { CopyIcon } from 'lucide-react'
+import { Badge, DataList, Flex } from '@radix-ui/themes'
 import React from 'react'
 
 type StatusCardProps = {
@@ -8,7 +7,7 @@ type StatusCardProps = {
 
 const StatusCard: React.FC<StatusCardProps> = ({ className }) => {
   return (
-    <Flex className='absolute right-20 top-20'>
+    <Flex className={'absolute right-20 top-20' + className} >
       <DataList.Root>
       <DataList.Item align="center">
         <DataList.Label minWidth="88px">Status</DataList.Label>
