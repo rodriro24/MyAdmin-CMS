@@ -161,9 +161,10 @@ export default function ProjectPage() {
                     setContent(defaultData.content);
                   }}
                   disabled={
-                    defaultData.title === title &&
+                    (defaultData.title === title &&
                     defaultData.content === content &&
-                    defaultData.showable === showable
+                      defaultData.showable === showable) || 
+                    isSaving
                   }
                 >
                   Cancel
