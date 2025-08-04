@@ -10,16 +10,17 @@ const SignInForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const router = useRouter();
   const [requested, setRequested] = useState(false);
+  const [unauthorized, setUnauthorized] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setUnauthorized(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     setRequested(true);
     e.preventDefault();
-    // console.log(form); // acá iría tu lógica de auth
-    // alert(`user ${ form.email} is trying to signin`)
     const res = await signIn('credentials', {
       redirect: false,
       email: form.email,
@@ -27,7 +28,8 @@ const SignInForm = () => {
     })
     if (!res?.ok) {
       setRequested(false);
-      return console.log(res)
+      if ((res?.error?.toLocaleLowerCase()) === 'invalid credentials') setUnauthorized(true);
+      if((res?.error?.toLocaleLowerCase()) === 'user not found') setNotFound(true);
     }
     router.push('/dashboard')
   };
@@ -59,6 +61,17 @@ const SignInForm = () => {
             <LockClosedIcon height="16" width="16" />
           </TextField.Slot>
         </TextField.Root>
+
+        {
+          unauthorized && (
+            <small className="text-red-500 text-center">Wrong credentials</small>
+          )
+        }
+        {
+          notFound && (
+            <small className="text-red-500 text-center">User not found</small>
+          )
+        }
 
         <Button color="blue" type="submit" loading={requested}>
           Sign In

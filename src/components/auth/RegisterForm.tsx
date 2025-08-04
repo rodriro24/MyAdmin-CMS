@@ -17,22 +17,21 @@ const RegisterForm = () => {
     nick: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setUserTaken(false);
   };
   const [requested, setRequested] = useState(false);
+  const [userTaken, setUserTaken] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setRequested(true);
-    console.log(form); // lógica para registrar
-    const res = await axios.post("/api/auth/register", form);
-    // console.log(res);
-    
-    if (res.status === 201) {
+    try {
+      const res = await axios.post("/api/auth/register", form);
+      if (res.status === 201) {
       const { email, password } = form;
       const result = await signIn('credentials', {
         redirect: false,
@@ -40,11 +39,18 @@ const RegisterForm = () => {
         password,
       })
       if (!result?.ok) {
-        console.log(result?.error)
         setRequested(false);
         return;
       }
       router.push('/dashboard')
+    }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 500) {
+          setRequested(false);
+          setUserTaken(true);
+        };
+      }
     }
   };
 
@@ -107,6 +113,11 @@ const RegisterForm = () => {
             <EnvelopeClosedIcon height="16" width="16" />
           </TextField.Slot>
         </TextField.Root>
+        {
+          userTaken && (
+            <small className="text-right -mt-2 text-red-400">Email already taken</small>
+          )
+        }
 
         <label htmlFor="password">Password</label>
         <TextField.Root
