@@ -211,7 +211,7 @@ const Settings = () => {
               <span className="text-[#C792EA]">const</span>{" "}
               <span className="text-[#82AAFF]">API_URL</span> ={" "}
               <span className="text-[#C3E88D]">
-                &quot;https://myadmin-cms-personal.vercel.app/api/projects&quot;
+                &quot;https://myadmin-cms-personal.vercel.app/api/public/projects&quot;
               </span>
               ;{"\n"}
               <span className="text-[#C792EA]">const</span>{" "}
@@ -232,6 +232,9 @@ const Settings = () => {
               <span className="text-[#89DDFF]">fetch</span>(
               <span className="text-[#82AAFF]">API_URL</span>, {"{"}
               {"\n      "}
+              method: {""}
+              <span className="text-[#C3E88D]">&quot;GET&quot;</span>
+              {",\n      "}
               headers: {"{"}
               {"\n        "}
               <span className="text-[#C3E88D]">
