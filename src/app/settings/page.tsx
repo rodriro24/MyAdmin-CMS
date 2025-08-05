@@ -1,9 +1,15 @@
 "use client";
-import { CopyIcon, InfoCircledIcon, ReloadIcon ,CheckIcon} from "@radix-ui/react-icons";
+import {
+  CopyIcon,
+  InfoCircledIcon,
+  ReloadIcon,
+  CheckIcon,
+} from "@radix-ui/react-icons";
 import {
   Badge,
   Button,
   Callout,
+  Card,
   Code,
   Container,
   DataList,
@@ -12,6 +18,7 @@ import {
   IconButton,
   Section,
   Separator,
+  Text,
 } from "@radix-ui/themes";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -72,22 +79,20 @@ const Settings = () => {
 
           <Separator size={"4"} className="my-3" />
 
-          {/* <Text>Manege your personal Api Key</Text> */}
-
           {/* DATA LIST AND STATUS */}
           <Callout.Root mt={"4"}>
             <Callout.Icon>
               <InfoCircledIcon />
             </Callout.Icon>
             <Callout.Text>
-              This will issue you a personal apikey, wich it will let you
-              consume within other projects to manage your portofolio´s projects
-              section as an CMS, keep this key private.
+              This key lets you connect your portfolio to other apps and manage
+              your projects remotely—just like a CMS. Treat it like a password:
+              keep it safe and don’t share it.
             </Callout.Text>
           </Callout.Root>
         </section>
 
-        <Section className="w-full flex flex-col mx-auto max-w-200 -mt-5">
+        <Section className="w-full flex flex-col mx-auto max-w-200 ">
           <DataList.Root>
             <DataList.Item align="center">
               <DataList.Label minWidth="88px">Status</DataList.Label>
@@ -104,22 +109,22 @@ const Settings = () => {
 
             {apiKey && (
               <DataList.Item>
-      <DataList.Label minWidth="88px">Key</DataList.Label>
-      <DataList.Value>
-        <Flex align="center" gap="2">
-          <Code variant="ghost">{apiKey || "xxxxxxxx"}</Code>
-          <IconButton
-            size="1"
-            aria-label="Copy value"
-            color={copied ? "green" : "gray"}
-            variant="ghost"
-            onClick={copyToClipboard}
-          >
-            {copied ? <CheckIcon /> : <CopyIcon />}
-          </IconButton>
-        </Flex>
-      </DataList.Value>
-    </DataList.Item>
+                <DataList.Label minWidth="88px">Key</DataList.Label>
+                <DataList.Value>
+                  <Flex align="center" gap="2">
+                    <Code variant="ghost">{apiKey || "xxxxxxxx"}</Code>
+                    <IconButton
+                      size="1"
+                      aria-label="Copy value"
+                      color={copied ? "green" : "gray"}
+                      variant="ghost"
+                      onClick={copyToClipboard}
+                    >
+                      {copied ? <CheckIcon /> : <CopyIcon />}
+                    </IconButton>
+                  </Flex>
+                </DataList.Value>
+              </DataList.Item>
             )}
 
             <DataList.Item>
@@ -150,6 +155,127 @@ const Settings = () => {
               )}{" "}
             </Button>
           </div>
+        </Section>
+
+        <Section className="w-full flex flex-col mx-auto max-w-200 -mt-15">
+          <Text weight="medium" size="4" mb="2">
+            How to consume your API
+          </Text>
+
+          <Callout.Root role="region" className="mb-4">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>
+              To use your API key, follow these simple steps:
+            </Callout.Text>
+          </Callout.Root>
+
+          <Text as="p" size="2" color="gray" mb="3">
+            Your API key allows you to interact with your personal CMS to fetch
+            or manage your projects from other platforms or apps. Here is how to
+            use it:
+          </Text>
+
+          <Flex direction="column" gap="2" mb="4">
+            <Text as="p" size="2">
+              <strong className="text-white">1. Get your API key:</strong> Click
+              the <Code>Request</Code> button above to generate one.
+            </Text>
+            <Text as="p" size="2">
+              <strong className="text-white">
+                2. Use the key in your requests:
+              </strong>{" "}
+              Send it as a header called <Code>x-api-key</Code> in your API
+              calls.
+            </Text>
+            <Text as="p" size="2">
+              <strong className="text-white">3. Call your endpoint:</strong> Use{" "}
+              <Code>fetch</Code>, <Code>axios</Code> or any HTTP client to hit
+              your API at:{" "}
+              <Code>https://myadmin-cms-personal.vercel.app/api/projects</Code>
+            </Text>
+            <Text as="p" size="2">
+              <strong className="text-white">4. Keep it secret:</strong> Never
+              expose your key publicly. Store it in environment variables or
+              secure configs.
+            </Text>
+          </Flex>
+
+          <Text weight="medium" mb="2">
+            See an example of implementation
+          </Text>
+
+          <Card className="bg-[#292D3E] rounded-xl p-4 text-sm font-mono overflow-x-auto whitespace-pre">
+            <code>
+              <span className="text-[#C792EA]">const</span>{" "}
+              <span className="text-[#82AAFF]">API_URL</span> ={" "}
+              <span className="text-[#C3E88D]">
+                &quot;https://myadmin-cms-personal.vercel.app/api/projects&quot;
+              </span>
+              ;{"\n"}
+              <span className="text-[#C792EA]">const</span>{" "}
+              <span className="text-[#82AAFF]">API_KEY</span> ={" "}
+              <span className="text-[#C3E88D]">
+                &quot;your-api-key-here&quot;
+              </span>
+              ; {/* replace with your actual key */}
+              {"\n\n"}
+              <span className="text-[#C792EA]">async function</span>{" "}
+              <span className="text-[#82AAFF]">fetchProjects</span>() {"{"}
+              {"\n  "}
+              <span className="text-[#C792EA]">try</span> {"{"}
+              {"\n    "}
+              <span className="text-[#C792EA]">const</span>{" "}
+              <span className="text-[#82AAFF]">res</span> ={" "}
+              <span className="text-[#C792EA]">await</span>{" "}
+              <span className="text-[#89DDFF]">fetch</span>(
+              <span className="text-[#82AAFF]">API_URL</span>, {"{"}
+              {"\n      "}
+              headers: {"{"}
+              {"\n        "}
+              <span className="text-[#C3E88D]">
+                &quot;x-api-key&quot;
+              </span>: <span className="text-[#82AAFF]">API_KEY</span>
+              {"\n      "}
+              {"}"}
+              {"\n    "}
+              {"}"});
+              {"\n\n    "}
+              <span className="text-[#C792EA]">if</span> (!res.ok) {"{"}
+              {"\n      "}
+              <span className="text-[#C792EA]">throw</span>{" "}
+              <span className="text-[#C3E88D]">new Error</span>(
+              <span className="text-[#C3E88D]">
+                &quot;Failed to fetch projects&quot;
+              </span>
+              );
+              {"\n    "}
+              {"}"}
+              {"\n\n    "}
+              <span className="text-[#C792EA]">const</span>{" "}
+              <span className="text-[#82AAFF]">data</span> ={" "}
+              <span className="text-[#C792EA]">await</span> res.
+              <span className="text-[#89DDFF]">json</span>();
+              {"\n    "}
+              <span className="text-[#89DDFF]">console</span>.
+              <span className="text-[#89DDFF]">log</span>(
+              <span className="text-[#C3E88D]">&quot;Projects:&quot;</span>,
+              data);
+              {"\n  "}
+              {"}"} <span className="text-[#C792EA]">catch</span> (err) {"{"}
+              {"\n    "}
+              <span className="text-[#89DDFF]">console</span>.
+              <span className="text-[#89DDFF]">error</span>(
+              <span className="text-[#C3E88D]">&quot;Error:&quot;</span>, err);
+              {"\n  "}
+              {"}"}
+              {"\n"}
+              {"}"}
+              {"\n\n"}
+              <span className="text-[#82AAFF]">fetchProjects</span>();
+            </code>
+          </Card>
         </Section>
       </Flex>
     </Container>

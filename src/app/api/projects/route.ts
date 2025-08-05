@@ -28,6 +28,7 @@ export async function POST(request: Request) {
       data: {
         title: data.title,
         content: data.content,
+        media: data.media,
         user: {
           connect: {
             id: Number(session?.user?.id),
