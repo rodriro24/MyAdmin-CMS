@@ -30,7 +30,7 @@ const ListItems = () => {
     const getTask = async () => {
       try {
         const res = await axios.get("/api/projects");
-        // console.log(res.data)
+        console.log(res.data)
         setData(res.data);
       } catch (error) {
         console.error(error);
@@ -70,7 +70,7 @@ const ListItems = () => {
                 <Text
                   onClick={() => router.push(`/dashboard/task/${task.id}`)}
                   size="2"
-                  className="w-full max-w-[90%] cursor-pointer text-gray-500 overflow-hidden text-ellipsis line-clamp-2 "
+                  className="w-full max-w-[85%] cursor-pointer text-gray-500 overflow-hidden text-ellipsis line-clamp-2 "
                 >
                   {task.content}
                 </Text>

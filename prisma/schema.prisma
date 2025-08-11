@@ -33,5 +33,6 @@ model Project {
   showable Boolean? @default(true)
   content String
   media String[] @default([])
+  links Json     @default("{}")
   user User @relation(fields: [userId], references: [id])
 }

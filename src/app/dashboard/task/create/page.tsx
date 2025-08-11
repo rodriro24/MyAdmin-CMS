@@ -1,5 +1,5 @@
 "use client";
-import { Cross1Icon } from "@radix-ui/react-icons";
+import { Cross1Icon, PlusIcon } from "@radix-ui/react-icons";
 import {
   Button,
   Container,
@@ -8,6 +8,9 @@ import {
   Heading,
   TextArea,
   Card,
+  Select,
+  Tooltip,
+  IconButton,
 } from "@radix-ui/themes";
 import axios from "axios";
 import { ArrowLeft, Plus } from "lucide-react";
@@ -16,11 +19,22 @@ import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
+type PlatformType = "deploy" | "github" | "other";
+
+interface LinkItem {
+  platform: PlatformType;
+  url: string;
+  customName?: string;
+}
+
 const Page = () => {
   const [titleFocused, setTitleFocused] = useState(false);
   const [contentFocused, setContentFocused] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [links, setLinks] = useState<LinkItem[]>([
+    { platform: "deploy", url: "" },
+  ]);
   const { control } = useForm();
   const [requested, setRequested] = useState(false);
   const router = useRouter();
@@ -32,15 +46,14 @@ const Page = () => {
     setRequested(true);
 
     try {
-      // Primero subir imágenes y obtener URLs
       const mediaUrls =
         mediaFiles.length > 0 ? await sendMedia(mediaFiles) : [];
 
-      // Luego enviar resto de datos junto con el array de URLs
       const payload = {
         title,
         content,
-        media: mediaUrls, // el array de URLs para guardar en prisma
+        media: mediaUrls,
+        links: JSON.stringify(links),
       };
 
       const res = await axios.post("/api/projects", payload);
@@ -49,6 +62,7 @@ const Page = () => {
         setContent("");
         setMediaFiles([]);
         setMediaPreviews([]);
+        setLinks([{ platform: "deploy", url: "" }]);
         router.push("/dashboard");
       }
     } catch (error) {
@@ -87,21 +101,50 @@ const Page = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const selectedFiles = Array.from(e.target.files);
-
-    const selectedPreviews = selectedFiles.map((file) => {
-      const url = URL.createObjectURL(file);
-      return url;
-    });
+    const selectedPreviews = selectedFiles.map((file) =>
+      URL.createObjectURL(file)
+    );
 
     setMediaFiles((prev) => [...prev, ...selectedFiles]);
     setMediaPreviews((prev) => [...prev, ...selectedPreviews]);
   };
 
-  // Al remover una imagen también limpiá el object URL:
   const removeImage = (index: number) => {
     URL.revokeObjectURL(mediaPreviews[index]);
     setMediaFiles((prev) => prev.filter((_, i) => i !== index));
     setMediaPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Handlers para Links
+  const handlePlatformChange = (index: number, value: PlatformType) => {
+    const updated = [...links];
+    updated[index].platform = value;
+    if (value !== "other" && updated[index].customName) {
+      delete updated[index].customName;
+    }
+    setLinks(updated);
+  };
+
+  const handleCustomNameChange = (index: number, value: string) => {
+    const updated = [...links];
+    updated[index].customName = value;
+    setLinks(updated);
+  };
+
+  const handleUrlChange = (index: number, value: string) => {
+    const updated = [...links];
+    updated[index].url = value;
+    setLinks(updated);
+  };
+
+  const addNewLink = () => {
+    setLinks([...links, { platform: "deploy", url: "" }]);
+  };
+
+  const removeLink = (index: number) => {
+    const updated = [...links];
+    updated.splice(index, 1);
+    setLinks(updated);
   };
 
   return (
@@ -114,22 +157,22 @@ const Page = () => {
               onClick={() => redirect("/dashboard")}
             />
             <Heading>New Project</Heading>
+
+            {/* TITLE */}
             <div className="relative mb-2">
               <Controller
                 control={control}
                 name="title"
-                render={() => {
-                  return (
-                    <TextField.Root
-                      id="title"
-                      value={title}
-                      onFocus={() => setTitleFocused(true)}
-                      onBlur={() => setTitleFocused(false)}
-                      onChange={(e) => setTitle(e.target.value)}
-                      className="pt-5"
-                    />
-                  );
-                }}
+                render={() => (
+                  <TextField.Root
+                    id="title"
+                    value={title}
+                    onFocus={() => setTitleFocused(true)}
+                    onBlur={() => setTitleFocused(false)}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="pt-5"
+                  />
+                )}
               />
               <label
                 htmlFor="title"
@@ -143,23 +186,22 @@ const Page = () => {
               </label>
             </div>
 
+            {/* CONTENT */}
             <div className="relative">
               <Controller
                 control={control}
                 name="content"
-                render={() => {
-                  return (
-                    <TextArea
-                      id="content"
-                      value={content}
-                      onFocus={() => setContentFocused(true)}
-                      onBlur={() => setContentFocused(false)}
-                      onChange={(e) => setContent(e.target.value)}
-                      className="pt-5 w-full"
-                      size="2"
-                    />
-                  );
-                }}
+                render={() => (
+                  <TextArea
+                    id="content"
+                    value={content}
+                    onFocus={() => setContentFocused(true)}
+                    onBlur={() => setContentFocused(false)}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="pt-5 w-full"
+                    size="2"
+                  />
+                )}
               />
               <label
                 htmlFor="content"
@@ -173,6 +215,106 @@ const Page = () => {
               </label>
             </div>
 
+            {/* LINKS */}
+            <div className="space-y-4 mt-2">
+              {/* Primer link fijo */}
+              <Flex gap="2" align="center">
+                <Select.Root
+                  value={links[0].platform}
+                  onValueChange={(value) =>
+                    handlePlatformChange(0, value as PlatformType)
+                  }
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Label>Platforms</Select.Label>
+                      <Select.Item value="deploy">Direct</Select.Item>
+                      <Select.Item value="github">Github</Select.Item>
+                      <Select.Item value="other">Other</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+
+                {links[0].platform === "other" && (
+                  <TextField.Root
+                    placeholder="Platform"
+                    value={links[0].customName || ""}
+                    onChange={(e) =>
+                      handleCustomNameChange(0, e.target.value)
+                    }
+                    className="w-[30%]"
+                  />
+                )}
+
+                <TextField.Root
+                  placeholder="Link URL"
+                  value={links[0].url}
+                  onChange={(e) => handleUrlChange(0, e.target.value)}
+                  className="w-[80%]"
+                />
+
+                <Tooltip content="Add new link">
+                  <IconButton radius="full" type="button" onClick={addNewLink}>
+                    <PlusIcon />
+                  </IconButton>
+                </Tooltip>
+              </Flex>
+
+              {/* Links extra */}
+              {links.slice(1).map((link, index) => (
+                <Flex key={index + 1} gap="2" align="center">
+                  <Select.Root
+                    value={link.platform}
+                    onValueChange={(value) =>
+                      handlePlatformChange(index + 1, value as PlatformType)
+                    }
+                  >
+                    <Select.Trigger />
+                    <Select.Content>
+                      <Select.Group>
+                        <Select.Label>Platforms</Select.Label>
+                        <Select.Item value="deploy">Direct</Select.Item>
+                        <Select.Item value="github">Github</Select.Item>
+                        <Select.Item value="other">Other</Select.Item>
+                      </Select.Group>
+                    </Select.Content>
+                  </Select.Root>
+
+                  {link.platform === "other" && (
+                    <TextField.Root
+                      placeholder="Platform"
+                      value={link.customName || ""}
+                      onChange={(e) =>
+                        handleCustomNameChange(index + 1, e.target.value)
+                      }
+                      className="w-[30%]"
+                    />
+                  )}
+
+                  <TextField.Root
+                    placeholder="Link URL"
+                    value={link.url}
+                    onChange={(e) =>
+                      handleUrlChange(index + 1, e.target.value)
+                    }
+                    className="w-[80%]"
+                  />
+
+                  <Tooltip content="Remove link">
+                    <IconButton
+                      radius="full"
+                      type="button"
+                      onClick={() => removeLink(index + 1)}
+                    >
+                      <Cross1Icon />
+                    </IconButton>
+                  </Tooltip>
+                </Flex>
+              ))}
+            </div>
+
+            {/* IMAGES */}
             <div>
               <input
                 type="file"
@@ -186,7 +328,8 @@ const Page = () => {
                 type="button"
                 onClick={() => document.getElementById("image-upload")?.click()}
               >
-                <Plus size={"20px"} />Add Images
+                <Plus size={"20px"} />
+                Add Images
               </Button>
 
               <div className="flex flex-wrap gap-3 mt-3 justify-center">
