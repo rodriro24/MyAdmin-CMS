@@ -76,13 +76,9 @@ const NavBar = () => {
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Content>
-                  <DropdownMenu.Item><User className="w-4 h-4 mr-2" />Profile</DropdownMenu.Item>
                   <DropdownMenu.Item onClick={() => router.push('/settings')}><Settings className="w-4 h-4 mr-2" />Settings</DropdownMenu.Item>
 
                   <DropdownMenu.Separator />
-
-                  {/* <DropdownMenu.Item><LayoutDashboard className="w-4 h-4 mr-2" />Manage Account</DropdownMenu.Item>
-                  <DropdownMenu.Separator /> */}
                   <DropdownMenu.Item color="red" onClick={() => signOut()}>
                     <LogOut className="w-4 h-4 mr-2" />Logout
                   </DropdownMenu.Item>
